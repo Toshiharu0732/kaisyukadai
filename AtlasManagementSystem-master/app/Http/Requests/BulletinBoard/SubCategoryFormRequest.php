@@ -33,7 +33,7 @@ class SubCategoryFormRequest extends FormRequest
             'sub_category_name.max' => 'カテゴリーは100文字以上入力してください。',
             'sub_category_name.required' => '入力必須です。',
             'sub_category_name.unique' => 'このカテゴリーはすでに登録済みです。',
-            'sub_category_name.string' => '文字で記入してください。',
+            'sub_category_name.string' => '文字で記入してくださいい。',
         ];
     }
 
