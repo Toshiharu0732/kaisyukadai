@@ -19,7 +19,8 @@ use Auth;
 class PostsController extends Controller
 {
     public function show(Request $request){
-        $posts = Post::with('user', 'postComments')->get();
+        //いいね数の表示、PostsController.phpにてwithCountメソッドを使用する（今回はこれを採用）↓
+        $posts = Post::with('user', 'postComments')->withCount('likes')->get();
         $categories = MainCategory::get();
         $like = new Like;
         $post_comment = new Post;

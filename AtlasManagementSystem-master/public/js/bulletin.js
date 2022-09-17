@@ -11,8 +11,11 @@ $(function () {
     var post_id = $(this).attr('post_id');
     var count = $('.like_counts' + post_id).text();
     var countInt = Number(count);
+    //ajax処理スタート
     $.ajax({
-      headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+      headers: { //HTTPヘッダ情報をヘッダ名と値のマップで記述
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
       method: "post",
       url: "/like/post/" + post_id,
       data: {
@@ -48,7 +51,7 @@ $(function () {
     });
   });
 
-  $('.edit-modal-open').on('click',function(){
+  $('.edit-modal-open').on('click', function () {
     $('.js-modal').fadeIn();
     var post_title = $(this).attr('post_title');
     var post_body = $(this).attr('post_body');
