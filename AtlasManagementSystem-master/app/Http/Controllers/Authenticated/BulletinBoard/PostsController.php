@@ -19,24 +19,25 @@ use Auth;
 class PostsController extends Controller
 {
     public function show(Request $request){
-        //いいね数の表示、PostsController.phpにてwithCountメソッドを使用する（今回はこれを採用）↓
+        //いいね数の表示、PostsController.phpにてwithCountメソッドを使用する方法↓
         $posts = Post::with('user', 'postComments')->withCount('likes')->get();
         $categories = MainCategory::get();
         $like = new Like;
         $post_comment = new Post;
         if(!empty($request->keyword)){
-            $posts = Post::with('user', 'postComments')
+            $posts = Post::with('user', 'postComments')->withCount('likes')
             ->where('post_title', 'like', '%'.$request->keyword.'%')
             ->orWhere('post', 'like', '%'.$request->keyword.'%')->get();
         }else if($request->category_word){
-            $sub_category = $request->category_word;
-            $posts = Post::with('user', 'postComments')->get();
+            $sub_category =
+            $request->category_word;
+            $posts = Post::with('user', 'postComments')->withCount('likes')->get();
         }else if($request->like_posts){
             $likes = Auth::user()->likePostId()->get('like_post_id');
-            $posts = Post::with('user', 'postComments')
+            $posts = Post::with('user', 'postComments')->withCount('likes')
             ->whereIn('id', $likes)->get();
         }else if($request->my_posts){
-            $posts = Post::with('user', 'postComments')
+            $posts = Post::with('user', 'postComments')->withCount('likes')
             ->where('user_id', Auth::id())->get();
         }
         return view('authenticated.bulletinboard.posts', compact('posts', 'categories', 'like', 'post_comment'));
@@ -49,7 +50,10 @@ class PostsController extends Controller
 
     public function postInput(){
         $main_categories = MainCategory::get();
-        return view('authenticated.bulletinboard.post_create', compact('main_categories'));
+        //$main_categories_id =MainCategory::where('id')->get();
+        //$sub_categories = SubCategory::with('main_categories')->whereIn('main_category_id',$main_categories_id)->get();
+        $sub_categories = SubCategory::get();
+        return view('authenticated.bulletinboard.post_create', compact('main_categories','sub_categories'));
     }
 
     public function postCreate(PostFormRequest $request){

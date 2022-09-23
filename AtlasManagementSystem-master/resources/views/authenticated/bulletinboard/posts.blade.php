@@ -40,6 +40,7 @@
       <ul>
         @foreach($categories as $category)
         <li class="main_categories" category_id="{{ $category->id }}"><span>{{ $category->main_category }}<span></li>
+        <input type="submit" name="" class="category_btn" value="{{$category->main_category}}" form="postSearchRequest">
         @endforeach
       </ul>
     </div>

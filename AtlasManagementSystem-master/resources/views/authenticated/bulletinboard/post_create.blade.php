@@ -9,7 +9,9 @@
         @foreach($main_categories as $main_category)
         <optgroup label="{{ $main_category->main_category }}"></optgroup>
         <!-- サブカテゴリー表示 -->
-        <optgroup label="{{ $main_category->sub_category }}"></optgroup>
+          @foreach($sub_categories as $sub_category)
+        <option label="{{ $sub_category->sub_category }}"></option>
+          @endforeach
         @endforeach
       </select>
     </div>
@@ -45,7 +47,15 @@
       </div>
       <!-- サブカテゴリー追加 -->
          <div class="">
+           @if($errors->first('sub_category_name'))
+        <span class="error_message">{{ $errors->first('sub_category_name') }}</span>
+        @endif
         <p class="m-0">サブカテゴリー</p>
+        <select class="w-100" form="postCreate" name="post_category_id">
+        @foreach($main_categories as $main_category)
+        <option label="{{ $main_category->main_category }}"></option>
+        @endforeach
+      </select>
         <input type="text" class="w-100" name="sub_category_name" form="subCategoryRequest">
         <input type="submit" value="追加" class="w-100 btn btn-primary p-0" form="subCategoryRequest">
       </div>
