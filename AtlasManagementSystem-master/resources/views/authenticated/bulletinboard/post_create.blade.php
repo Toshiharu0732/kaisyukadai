@@ -51,13 +51,16 @@
         <span class="error_message">{{ $errors->first('sub_category_name') }}</span>
         @endif
         <p class="m-0">サブカテゴリー</p>
-        <select class="w-100" form="postCreate" name="post_category_id">
+
+        <input class="w-100" form="subCategoryRequest" name="main_category_id" >
         @foreach($main_categories as $main_category)
-        <option label="{{ $main_category->main_category }}"></option>
+        <optgroup label="{{ $main_category->main_category }}"></optgroup>
         @endforeach
-      </select>
+        </input>
+
         <input type="text" class="w-100" name="sub_category_name" form="subCategoryRequest">
-        <input type="submit" value="追加" class="w-100 btn btn-primary p-0" form="subCategoryRequest">
+        <input type="submit" value="追加" class="w-100 btn btn-primary p-0" form="subCategoryRequest" >
+
       </div>
       <form action="{{ route('main.category.create') }}" method="post" id="mainCategoryRequest">{{ csrf_field() }}</form>
       <form action="{{ route('sub.category.create') }}" method="post" id="subCategoryRequest">{{ csrf_field() }}</form>

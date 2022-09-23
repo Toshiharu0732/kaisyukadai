@@ -13,8 +13,8 @@ class MainCategory extends Model
     ];
 
     public function subCategories(){
-    return $this->belongsToMany
-     ('App\Models\Categories\SubCategory','sub_categories','main_category_id','id')->withPivot('id');// リレーションの定義
+    return $this->hasMany
+     ('App\Models\Categories\SubCategory');// リレーションの定義
     }
 
 }

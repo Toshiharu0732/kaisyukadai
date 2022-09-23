@@ -22,6 +22,7 @@ class PostsController extends Controller
         //いいね数の表示、PostsController.phpにてwithCountメソッドを使用する方法↓
         $posts = Post::with('user', 'postComments')->withCount('likes')->get();
         $categories = MainCategory::get();
+        $sub_categories = SubCategory::get();
         $like = new Like;
         $post_comment = new Post;
         if(!empty($request->keyword)){
@@ -40,7 +41,7 @@ class PostsController extends Controller
             $posts = Post::with('user', 'postComments')->withCount('likes')
             ->where('user_id', Auth::id())->get();
         }
-        return view('authenticated.bulletinboard.posts', compact('posts', 'categories', 'like', 'post_comment'));
+        return view('authenticated.bulletinboard.posts', compact('posts', 'categories', 'like', 'post_comment','sub_categories'));
     }
 
     public function postDetail($post_id){
@@ -53,7 +54,7 @@ class PostsController extends Controller
         //$main_categories_id =MainCategory::where('id')->get();
         //$sub_categories = SubCategory::with('main_categories')->whereIn('main_category_id',$main_categories_id)->get();
         $sub_categories = SubCategory::get();
-        return view('authenticated.bulletinboard.post_create', compact('main_categories','sub_categories'));
+        return view('authenticated.bulletinboard.post_create',compact('main_categories','sub_categories'));
     }
 
     public function postCreate(PostFormRequest $request){
@@ -83,7 +84,16 @@ class PostsController extends Controller
     }
 
     public function subCategoryCreate(SubCategoryFormRequest $request){
-        SubCategory::create(['sub_category' => $request->sub_category_name]);
+        //↓save()を使った登録方法
+
+        //$sub= new SubCategory;
+        //$sub-> main_category_id=$request->main_category_id;
+       // $sub->sub_category=$request->sub_category_name;
+        //$sub->save();
+
+        SubCategory::create([
+            'main_category_id' => $request->main_category_id,
+            'sub_category'=>$request->sub_category_name]);
         return redirect()->route('post.input');
     }
 
