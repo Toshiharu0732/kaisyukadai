@@ -20,9 +20,8 @@ class PostsController extends Controller
 {
     public function show(Request $request){
         //いいね数の表示、PostsController.phpにてwithCountメソッドを使用する方法↓
-        $posts = Post::with('user', 'postComments')->withCount('likes')->get();
+        $posts = Post::with('user', 'postComments','subCategories')->withCount('likes')->get();
         $categories = MainCategory::get();
-        $sub_categories = SubCategory::get();
         $like = new Like;
         $post_comment = new Post;
         if(!empty($request->keyword)){
@@ -41,7 +40,7 @@ class PostsController extends Controller
             $posts = Post::with('user', 'postComments')->withCount('likes')
             ->where('user_id', Auth::id())->get();
         }
-        return view('authenticated.bulletinboard.posts', compact('posts', 'categories', 'like', 'post_comment','sub_categories'));
+        return view('authenticated.bulletinboard.posts', compact('posts', 'categories', 'like', 'post_comment'));
     }
 
     public function postDetail($post_id){
@@ -50,11 +49,8 @@ class PostsController extends Controller
     }
 
     public function postInput(){
-        $main_categories = MainCategory::get();
-        $main_categories_id =MainCategory::get()->pluck('id');
-        $sub_categories = SubCategory::with('mainCategory')->whereIn('main_category_id',$main_categories_id)->get();
-        //$sub_categories = SubCategory::get();
-        return view('authenticated.bulletinboard.post_create',compact('main_categories','sub_categories'));
+        $main_categories = MainCategory::with('subCategories')->get();
+        return view('authenticated.bulletinboard.post_create',compact('main_categories'));
     }
 
     public function postCreate(PostFormRequest $request){
